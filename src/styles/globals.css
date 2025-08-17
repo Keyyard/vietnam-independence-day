@@ -1,26 +1,152 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;800&display=swap');
+/* 'Imperial Script' isn't available on Google Fonts; use 'Great Vibes' as a close decorative script fallback, or load a local font if you have it. */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Theme colors provided by the user */
+  --theme-primary: #B9375D; /* strong */
+  --theme-accent: #D25D5D;  /* slightly lighter */
+  --theme-muted: #E7D3D3;   /* muted background */
+  --theme-bg: #ffecc9;      /* page background */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --ui-card: #ffffff;
+  /* use user-requested card background */
+  --ui-card: #FAD691;
+  --ui-border: #e6e6e6;
+  --text-default: #1f1f1f;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--theme-bg);
+  color: var(--text-default);
+  font-family: 'Be Vietnam Pro', Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-size: 18px; /* increased base size for better readability */
 }
+
+/* Title font utility */
+.font-title {
+  font-family: 'Great Vibes', 'Imperial Script', cursive;
+}
+
+/* UI font utility (explicit) */
+.font-ui {
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+}
+
+/* Extra-large heading utility */
+.heading-xl {
+  font-size: 4.5rem; /* approx Tailwind text-8xl */
+  line-height: 1;
+}
+
+/* Heading back/front layers for 3D offset effect */
+.heading-wrap {
+  position: relative;
+  display: inline-block;
+}
+.heading-back {
+  position: absolute;
+  left: 6px; /* offset to the right */
+  top: 6px; /* offset downward slightly */
+  color: white;
+  z-index: 0;
+  filter: blur(0.2px);
+  white-space: nowrap;
+}
+.heading-front {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+/* Small theme helper classes */
+.theme-primary {
+  background-color: var(--theme-primary);
+  color: white;
+}
+
+.theme-accent {
+  background-color: var(--theme-accent);
+  color: white;
+}
+
+.theme-muted {
+  background-color: var(--theme-muted);
+}
+
+.card {
+  background: var(--ui-card);
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  padding: 0.75rem; /* make card contain inner spacing by default */
+  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+}
+
+.btn-primary {
+  background: var(--theme-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  /* square corners for option tiles */
+  border-radius: 0px;
+  border: none;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: var(--theme-accent);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--ui-border);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+}
+
+.btn-outline:hover,
+.btn-outline:focus {
+  background: var(--theme-muted);
+}
+
+/* Improve image thumbnails */
+.thumb {
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box; /* ensure padding and border are included in width/height */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumb.selected {
+  outline: 3px solid rgba(185,55,93,0.18);
+  box-shadow: 0 6px 12px rgba(185,55,93,0.08);
+}
+
+/* Ensure images inside thumbnails fit the square consistently */
+.thumb img,
+.thumb svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Size the 'None' inline icon smaller so it doesn't visually dominate the thumbnail */
+.thumb .none-icon {
+  width: 56%;
+  height: 56%;
+  opacity: 0.85;
+}
+
+/* small utility */
+.shadow-soft {
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+

@@ -1,115 +1,101 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import React, { useMemo, useRef, useState } from 'react';
+import CharacterStage, { LayerState, CharacterStageHandle } from '../components/organisms/CharacterStage';
+import Sidebar from '../components/organisms/Sidebar';
+import EditorBoard from '../components/organisms/EditorBoard';
+import { factors } from '../data/factors';
 
 export default function Home() {
+  const defaultLayers: LayerState[] = useMemo(() => {
+    // build initial layers from factors list; choose first non-empty asset (usually the second entry) so defaults aren't 'None'
+    return factors.map(f => {
+      const firstNonEmpty = f.assets.find(a => a.src) ?? f.assets[0];
+      return {
+        id: f.id,
+        src: firstNonEmpty?.src ?? '',
+        visible: true,
+        hue: 0,
+        brightness: 1,
+        saturate: 1,
+      } as LayerState;
+    });
+  }, []);
+
+  const [layers, setLayers] = useState<LayerState[]>(defaultLayers);
+  const stageRef = useRef<CharacterStageHandle | null>(null);
+  const [selectedFactor, setSelectedFactor] = useState<string | null>('hair');
+
+  function toggle(id: string) {
+    setLayers(prev => prev.map(l => l.id === id ? { ...l, visible: !l.visible } : l));
+  }
+  function change(id: string, patch: Partial<LayerState>) {
+    setLayers(prev => prev.map(l => l.id === id ? { ...l, ...patch } : l));
+  }
+
+  async function exportPNG() {
+    if (!stageRef.current) return;
+    const dataUrl = await stageRef.current.exportPNG();
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'avatar.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  // Ensure a layer exists for the given factor id. If missing, add a default entry
+  function ensureLayerExists(factorId: string) {
+    setLayers(prev => {
+      if (prev.find(l => l.id === factorId)) return prev;
+      const fac = factors.find(f => f.id === factorId);
+      const firstNonEmpty = fac?.assets.find(a => a.src) ?? fac?.assets[0];
+      const newLayer: LayerState = {
+        id: factorId,
+        src: firstNonEmpty?.src ?? '',
+        visible: true,
+        hue: 0,
+        brightness: 1,
+        saturate: 1,
+      };
+      // insert new layer in the same order as factors
+      const factorOrder = factors.map(f => f.id);
+      const newArr: LayerState[] = [];
+      for (const fid of factorOrder) {
+        const existing = prev.find(p => p.id === fid);
+        if (existing) newArr.push(existing);
+        else if (fid === factorId) newArr.push(newLayer);
+      }
+      // include any others that might exist but not in the factors list
+      for (const p of prev) if (!newArr.find(n => n.id === p.id)) newArr.push(p);
+      return newArr;
+    });
+  }
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-white flex flex-col items-center justify-start p-8">
+      <div className="w-full flex justify-center mb-6">
+        <div className="heading-wrap">
+          <h1 className="heading-xl font-title heading-back" style={{ fontFamily: `"Great Vibes", "Imperial Script", cursive`, color: 'var(--theme-muted)' }}>Happy Vietnam Independence Day</h1>
+          <h1 className="heading-xl font-title heading-front" style={{ color: 'var(--theme-primary)', fontFamily: `"Great Vibes", "Imperial Script", cursive` }}>Happy Vietnam Independence Day</h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      <div className="flex items-start gap-6 justify-center" style={{ width: 960 }}>
+        <main style={{ width: 560 }} className="flex items-start justify-center">
+          <div className="p-6 bg-gray-100 rounded-lg shadow-lg card">
+            <div className="bg-white p-4 rounded-md shadow-inner">
+              <CharacterStage ref={stageRef} layers={layers} size={512} />
+            </div>
+          </div>
+        </main>
+
+        <aside style={{ width: 320 }} className="flex flex-col gap-3">
+          <Sidebar layers={layers} onToggle={toggle} onChange={change} selectedFactor={selectedFactor} onSelectFactor={(id)=>{ console.log('selectFactor ->', id); if(!id) { setSelectedFactor(null); return; } ensureLayerExists(id); setSelectedFactor(id); }} />
+          <EditorBoard layer={layers.find(l=>l.id===selectedFactor) ?? null} onChange={(patch)=>{ if(!selectedFactor) return; change(selectedFactor, patch); }} />
+
+          <div className="p-4">
+            <button onClick={exportPNG} className="w-full btn-primary">Download PNG</button>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
