@@ -1,5 +1,4 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
-import { factors } from '../../data/factors';
 
 export type LayerState = {
   id: string;
@@ -19,8 +18,11 @@ export type CharacterStageHandle = {
   exportPNG: () => Promise<string>;
 };
 
-const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 512, layers }, ref) => {
+const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 256, layers }, ref) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // explicit order (bottom -> top): background, base, shoes, pants, shirt, mouth, nose, piercing, eyes, eyebrow
+  const orderedIds = React.useMemo<string[]>(() => ['background', 'base', 'hair', 'shoes', 'pants', 'shirt', 'mouth', 'nose', 'piercing', 'eyes', 'eyebrow'], []);
 
   useImperativeHandle(ref, () => ({
     exportPNG: async () => {
@@ -30,14 +32,7 @@ const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 512, la
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Canvas not supported');
 
-      // draw background white
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // strict order: background first, base second, then the rest in factors order
-  const order = factors.map(f => f.id).filter(id => id !== 'background' && id !== 'base');
-  const orderedIds = ['background', 'base', ...order];
-      const orderedLayers = orderedIds
+  const orderedLayers = orderedIds
         .map(id => layers.find(l => l.id === id))
         .filter(Boolean) as LayerState[];
 
@@ -61,16 +56,12 @@ const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 512, la
 
       return canvas.toDataURL('image/png');
     }
-  }), [layers, size]);
+  }), [layers, size, orderedIds]);
 
-  // render layers in the same strict order so background is underneath
-  const renderOrder = (() => {
-    const order = factors.map(f => f.id).filter(id => id !== 'background' && id !== 'base');
-    const orderedIds = ['background', 'base', ...order];
-    return orderedIds
-      .map(id => layers.find(l => l.id === id))
-      .filter(Boolean) as LayerState[];
-  })();
+  // render layers in the same explicit order so background is underneath
+  const renderOrder = orderedIds
+    .map(id => layers.find(l => l.id === id))
+    .filter(Boolean) as LayerState[];
 
   return (
     <div ref={containerRef} className={`bg-white relative`} style={{ width: size, height: size }}>
