@@ -16,17 +16,16 @@ export default function Sidebar({ layers, onToggle, onChange, selectedFactor = n
   const currentFactor: Factor | undefined = factors.find(f => f.id === selectedFactor);
 
   return (
-  <div className="w-full md:w-80 h-full card flex flex-col">
+  <div className="w-full h-full card flex flex-col">
       <div className="p-3 border-b">
         <h3 className="text-lg font-semibold" style={{color: 'var(--theme-primary)'}}>Traits</h3>
       </div>
-      <div className="flex flex-wrap gap-2 p-3">
+  <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4 xl:gap-5 p-3">
         {factors.map(f => (
           <button
             key={f.id}
             onClick={() => onSelectFactor?.(f.id)}
             className={`text-sm rounded-md px-3 py-1 h-8 flex items-center justify-center ${selectedFactor === f.id ? 'btn-primary' : 'btn-outline'}`}
-            style={{ marginRight: 6 }}
           >
             {f.label}
           </button>
@@ -38,7 +37,7 @@ export default function Sidebar({ layers, onToggle, onChange, selectedFactor = n
         {currentFactor ? (
           <div>
             <h4 className="text-sm font-medium mb-2">Choose {currentFactor.label}</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
               {currentFactor.assets.map((a: {id:string; src:string; name?:string}) => {
                 const layerForFactor = layers.find(l => l.id === currentFactor.id);
                 const isSelected = layerForFactor?.src === a.src || (a.src === '' && !layerForFactor?.src);
@@ -69,9 +68,9 @@ export default function Sidebar({ layers, onToggle, onChange, selectedFactor = n
             </div>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-2 md:space-y-4">
             {layers.map(l=> (
-              <LayerItem key={l.id} layer={l} onToggle={onToggle} onSelect={(id)=>onSelectFactor?.(id)} />
+              <LayerItem key={l.id} layer={l} onToggle={onToggle} />
             ))}
           </div>
         )}

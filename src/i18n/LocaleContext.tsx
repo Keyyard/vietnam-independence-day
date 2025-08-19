@@ -31,9 +31,11 @@ export function LocaleProvider({ children }:{children:React.ReactNode}){
   React.useEffect(() => {
     try {
       if (typeof window === 'undefined') return;
+      // only auto-detect if the user hasn't previously selected a locale
+      const stored = localStorage.getItem('locale');
+      if (stored) return;
       const nav = (navigator.languages && navigator.languages[0]) || (navigator.language) || '';
-      console.error('Detected browser language:', nav);
-      const detected: LocaleKey = nav.startsWith('en') ? 'en' : 'vi';
+      const detected: LocaleKey = nav.startsWith('vi') ? 'vi' : 'en';
       setLocale(detected);
     } catch {
       // ignore

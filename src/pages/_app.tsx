@@ -5,7 +5,7 @@ import { LocaleProvider, useLocale } from "../i18n/LocaleContext";
 function LangToggle(){
   const { locale, setLocale } = useLocale();
   return (
-    <div style={{ position: 'fixed', right: 12, top: 12, zIndex: 999 }}>
+    <div className="fixed right-4 top-4 z-50">
       <button className="btn-outline" onClick={() => setLocale(locale === 'en' ? 'vi' : 'en')}>
         {locale === 'en' ? 'VI' : 'EN'}
       </button>
