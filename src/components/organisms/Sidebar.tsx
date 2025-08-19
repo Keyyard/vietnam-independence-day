@@ -44,10 +44,9 @@ export default function Sidebar({ layers, onToggle, onChange, selectedFactor = n
                 const isSelected = layerForFactor?.src === a.src || (a.src === '' && !layerForFactor?.src);
                 const handleClick = () => {
                   if (!a.src) {
-                    // clear layer -> set name to 'None' or asset name if provided
                     onChange(currentFactor.id, { src: '', visible: false, name: a.name ?? 'None' });
                   } else {
-                    onChange(currentFactor.id, { src: a.src, visible: true, name: a.name ?? currentFactor.label });
+                    onChange(currentFactor.id, { src: a.src, visible: true, name: a.name ?? '' });
                   }
                 };
                 return (
