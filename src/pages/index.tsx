@@ -73,23 +73,23 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-start p-8">
+  <div className=" flex flex-col items-center justify-start p-12 md:p-8">
       <div className="w-full flex justify-center mb-6">
         <div className="heading-wrap">
-          <h1 className="heading-xl font-title heading-back" style={{ fontFamily: `"Great Vibes", "Imperial Script", cursive`, color: 'var(--theme-muted)' }}>Happy Vietnam Independence Day</h1>
-          <h1 className="heading-xl font-title heading-front" style={{ color: 'var(--theme-primary)', fontFamily: `"Great Vibes", "Imperial Script", cursive` }}>Happy Vietnam Independence Day</h1>
+                <h1 className="font-title heading-back text-lg heading-xl text-[var(--theme-muted)]">Happy Vietnam Independence Day</h1>
+                <h1 className="font-title heading-front text-lg heading-xl text-[var(--theme-primary)]">Happy Vietnam Independence Day</h1>
         </div>
       </div>
-      <div className="flex items-start gap-6 justify-center" style={{ width: 960 }}>
-        <main style={{ width: 560 }} className="flex items-start justify-center">
+  <div className="flex flex-col md:flex-row items-center md:items-start gap-6 justify-center w-full max-w-5xl px-2 md:px-0">
+        <main className="w-full md:w-2/3 flex items-start justify-center">
           <div className="p-6 bg-gray-100 rounded-lg shadow-lg card">
-            <div className="bg-white p-4 rounded-md shadow-inner">
-              <CharacterStage ref={stageRef} layers={layers} size={512} />
+            <div className="bg-white p-4 rounded-md shadow-inner mx-auto">
+              <CharacterStage ref={stageRef} layers={layers} size={356} />
             </div>
           </div>
         </main>
 
-        <aside style={{ width: 320 }} className="flex flex-col gap-3">
+  <aside className="md:w-1/3 flex flex-col gap-3 mx-auto">
           <Sidebar layers={layers} onToggle={toggle} onChange={change} selectedFactor={selectedFactor} onSelectFactor={(id)=>{ console.log('selectFactor ->', id); if(!id) { setSelectedFactor(null); return; } ensureLayerExists(id); setSelectedFactor(id); }} />
           <EditorBoard layer={layers.find(l=>l.id===selectedFactor) ?? null} onChange={(patch)=>{ if(!selectedFactor) return; change(selectedFactor, patch); }} />
 

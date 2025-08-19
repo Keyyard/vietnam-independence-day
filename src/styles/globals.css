@@ -2,9 +2,7 @@
 /* 'Imperial Script' isn't available on Google Fonts; use 'Great Vibes' as a close decorative script fallback, or load a local font if you have it. */
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   /* Theme colors provided by the user */
@@ -150,3 +148,8 @@ body {
   box-shadow: 0 6px 14px rgba(0,0,0,0.06);
 }
 
+@media screen and (max-width: 768px) {
+  .heading-xl {
+    font-size: 3rem; /* adjust for smaller screens */
+  }
+}

@@ -6,11 +6,11 @@ import { useLocale } from '../../i18n/LocaleContext';
 export default function EditorBoard({ layer, onChange }:{layer:LayerState | null; onChange:(patch:Partial<LayerState>)=>void}){
   const { t } = useLocale();
   if (!layer) return (
-    <div className="w-80 p-4 card">{t('select_trait')}</div>
+    <div className="w-full p-4 card">{t('select_trait')}</div>
   );
 
   return (
-    <div className="w-80 p-4 card space-y-3">
+    <div className="w-full p-4 card space-y-3">
   <h4 className="font-semibold text-sm">{t('editing')}: {layer.name ?? layer.id}</h4>
       <div>
         <Slider label={t('hue')} min={0} max={360} value={layer.hue} onChange={(v)=>onChange({hue:v})} />
