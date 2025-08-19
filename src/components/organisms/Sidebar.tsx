@@ -44,10 +44,10 @@ export default function Sidebar({ layers, onToggle, onChange, selectedFactor = n
                 const isSelected = layerForFactor?.src === a.src || (a.src === '' && !layerForFactor?.src);
                 const handleClick = () => {
                   if (!a.src) {
-                    // clear layer
-                    onChange(currentFactor.id, { src: '', visible: false });
+                    // clear layer -> set name to 'None' or asset name if provided
+                    onChange(currentFactor.id, { src: '', visible: false, name: a.name ?? 'None' });
                   } else {
-                    onChange(currentFactor.id, { src: a.src, visible: true });
+                    onChange(currentFactor.id, { src: a.src, visible: true, name: a.name ?? currentFactor.label });
                   }
                 };
                 return (
@@ -72,7 +72,7 @@ export default function Sidebar({ layers, onToggle, onChange, selectedFactor = n
         ) : (
           <div className="space-y-2">
             {layers.map(l=> (
-              <LayerItem key={l.id} layer={{id:l.id,name:l.id,src:l.src,visible:l.visible,hue:l.hue,brightness:l.brightness,saturate:l.saturate}} onToggle={onToggle} onSelect={(id)=>onSelectFactor?.(id)} />
+              <LayerItem key={l.id} layer={l} onToggle={onToggle} onSelect={(id)=>onSelectFactor?.(id)} />
             ))}
           </div>
         )}

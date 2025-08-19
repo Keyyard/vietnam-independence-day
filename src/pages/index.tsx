@@ -11,6 +11,7 @@ export default function Home() {
       const firstNonEmpty = f.assets.find(a => a.src) ?? f.assets[0];
       return {
         id: f.id,
+        name: firstNonEmpty?.name ?? f.label ?? f.id,
         src: firstNonEmpty?.src ?? '',
         visible: true,
         hue: 0,
@@ -50,6 +51,7 @@ export default function Home() {
       const firstNonEmpty = fac?.assets.find(a => a.src) ?? fac?.assets[0];
       const newLayer: LayerState = {
         id: factorId,
+        name: firstNonEmpty?.name ?? fac?.label ?? factorId,
         src: firstNonEmpty?.src ?? '',
         visible: true,
         hue: 0,

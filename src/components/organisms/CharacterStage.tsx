@@ -2,6 +2,7 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 
 export type LayerState = {
   id: string;
+  name?: string;
   src: string;
   visible: boolean;
   hue: number;
@@ -71,7 +72,7 @@ const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 256, la
           <img
             key={layer.id}
             src={layer.src}
-            alt={layer.id}
+            alt={layer.name ?? layer.id}
             style={{
               filter: `hue-rotate(${layer.hue}deg) brightness(${layer.brightness}) saturate(${layer.saturate})`,
               zIndex: idx + 1,
