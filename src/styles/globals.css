@@ -48,9 +48,9 @@ body {
 }
 .heading-back {
   position: absolute;
-  left: 6px; /* offset to the right */
-  top: 6px; /* offset downward slightly */
-  color: white;
+  left: 0.15rem; /* offset to the right */
+  top: 0.15rem; /* offset downward slightly */
+  color: rgba(0, 0, 0, 0.182);
   z-index: 0;
   filter: blur(0.2px);
   white-space: nowrap;
@@ -151,5 +151,14 @@ body {
 @media screen and (max-width: 768px) {
   .heading-xl {
     font-size: 3rem; /* adjust for smaller screens */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .heading-xl {
+    font-size: 1.5rem; /* further adjust for very small screens */
+  }
+  body {
+    font-size: 16px; /* slightly smaller base font for mobile */
   }
 }

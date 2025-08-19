@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useEffect, useState } from 'react';
 
 export type LayerState = {
   id: string;
@@ -21,6 +21,18 @@ export type CharacterStageHandle = {
 
 const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 256, layers }, ref) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  // displaySize is the pixel size used for on-screen preview (kept small on phones)
+  const [displaySize, setDisplaySize] = useState<number>(size);
+
+  useEffect(() => {
+    function update() {
+      const isSmall = typeof window !== 'undefined' && window.innerWidth < 768;
+      setDisplaySize(isSmall ? Math.min(200, size) : size);
+    }
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [size]);
 
   // explicit order (bottom -> top): background, base, shoes, pants, shirt, mouth, nose, piercing, eyes, eyebrow
   const orderedIds = React.useMemo<string[]>(() => ['background', 'base', 'hair', 'shoes', 'pants', 'shirt', 'mouth', 'nose', 'piercing', 'eyes', 'eyebrow'], []);
@@ -65,7 +77,7 @@ const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 256, la
     .filter(Boolean) as LayerState[];
 
   return (
-    <div ref={containerRef} className={`bg-white relative`} style={{ width: size, height: size }}>
+    <div ref={containerRef} className={`bg-white relative mx-auto`} style={{ width: displaySize, height: displaySize }}>
       {renderOrder.map((layer, idx) => {
         if (!layer.src || !layer.visible) return null;
         return (
