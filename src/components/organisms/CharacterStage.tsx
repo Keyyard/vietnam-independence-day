@@ -34,8 +34,8 @@ const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 256, la
     return () => window.removeEventListener('resize', update);
   }, [size]);
 
-  // explicit order (bottom -> top): background, base, shoes, pants, shirt, mouth, nose, piercing, eyes, eyebrow
-  const orderedIds = React.useMemo<string[]>(() => ['background', 'base', 'hair', 'shoes', 'pants', 'shirt', 'mouth', 'nose', 'piercing', 'eyes', 'eyebrow'], []);
+  // explicit order (bottom -> top): background, base, shoes, pants, shirt, mouth, piercing, eyes, eyebrow
+  const orderedIds = React.useMemo<string[]>(() => ['background', 'base', 'hair', 'shoes', 'pants', 'shirt', 'mouth', 'piercing', 'eyes', 'eyebrow'], []);
 
   useImperativeHandle(ref, () => ({
     exportPNG: async () => {
@@ -58,6 +58,11 @@ const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 256, la
           img.onload = () => {
             ctx.save();
             ctx.filter = `hue-rotate(${layer.hue}deg) brightness(${layer.brightness}) saturate(${layer.saturate})`;
+                  ctx.imageSmoothingEnabled = false;
+                  // draw using nearest-neighbor scaling if supported
+                  if ('imageSmoothingQuality' in ctx) {
+                    (ctx as CanvasRenderingContext2D & { imageSmoothingQuality?: string }).imageSmoothingQuality = 'low';
+                  }
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             ctx.restore();
             resolve();
@@ -89,7 +94,7 @@ const CharacterStage = forwardRef<CharacterStageHandle, Props>(({ size = 256, la
               filter: `hue-rotate(${layer.hue}deg) brightness(${layer.brightness}) saturate(${layer.saturate})`,
               zIndex: idx + 1,
             }}
-            className="absolute inset-0 w-full h-full object-contain"
+            className="absolute inset-0 w-full h-full object-contain pixelated"
           />
         );
       })}

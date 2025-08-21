@@ -20,7 +20,7 @@ export default function Sidebar({ layers, onToggle, onChange, selectedFactor = n
       <div className="p-3 border-b">
         <h3 className="text-lg font-semibold" style={{color: 'var(--theme-primary)'}}>Traits</h3>
       </div>
-  <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4 xl:gap-5 p-3">
+  <div className="flex flex-wrap gap-2 p-3">
         {factors.map(f => (
           <button
             key={f.id}

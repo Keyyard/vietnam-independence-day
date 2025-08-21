@@ -10,6 +10,7 @@
   --theme-accent: #D25D5D;  /* slightly lighter */
   --theme-muted: #E7D3D3;   /* muted background */
   --theme-bg: #ffecc9;      /* page background */
+  --theme-primary-hover: #da5a5a;
 
   --ui-card: #ffffff;
   /* use user-requested card background */
@@ -86,7 +87,7 @@ body {
 
 .btn-primary {
   background: var(--theme-primary);
-  color: white;
+  color: var(--ui-card);
   padding: 0.5rem 1rem;
   /* square corners for option tiles */
   border-radius: 3px;
@@ -107,7 +108,7 @@ body {
 
 .btn-outline:hover,
 .btn-outline:focus {
-  background: var(--theme-muted);
+  background: var(--theme-primary-hover);
 }
 
 /* Improve image thumbnails */
@@ -157,4 +158,12 @@ body {
   body {
     font-size: 16px; /* slightly smaller base font for mobile */
   }
+}
+
+/* For pixel-art / low-res assets we want a crisp nearest-neighbor upscale */
+.pixelated,
+.thumb img.pixelated,
+.character-stage img.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
