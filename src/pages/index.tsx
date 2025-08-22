@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
+import Head from 'next/head';
 import CharacterStage, { LayerState, CharacterStageHandle } from '../components/organisms/CharacterStage';
 import Sidebar from '../components/organisms/Sidebar';
 import EditorBoard from '../components/organisms/EditorBoard';
@@ -74,10 +75,14 @@ export default function Home() {
 
   return (
   <div className=" flex flex-col items-center justify-start p-12 md:p-8">
+      <Head>
+        <title>Character Generator</title>
+      </Head>
       <div className="w-full flex justify-center mb-6">
         <div className="heading-wrap">
-                <h1 className="font-title heading-back text-lg heading-xl text-[var(--theme-muted)]">Happy Vietnam Independence Day</h1>
-                <h1 className="font-title heading-front text-lg heading-xl text-[var(--theme-primary)]">Happy Vietnam Independence Day</h1>
+                <h1 className="font-title heading-back text-lg heading-xl text-[var(--theme-muted)]">Character Generator</h1>
+                <h1 className="font-title heading-front text-lg heading-xl text-[var(--theme-primary)]">Character Generator</h1>
+                <h2 className="subheading">Happy Vietnam Independence Day</h2>
         </div>
       </div>
   <div className="flex flex-col md:flex-row items-center md:items-start gap-6 justify-center w-full max-w-5xl px-2 md:px-0">

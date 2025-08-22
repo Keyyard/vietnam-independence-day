@@ -16,29 +16,30 @@ const LocaleContext = React.createContext<LocaleContextValue>({
 });
 
 export function LocaleProvider({ children }:{children:React.ReactNode}){
-  const [locale, setLocaleState] = React.useState<LocaleKey>(() => {
-    try {
-      const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') : null;
-      return (stored as LocaleKey) ?? defaultLocale;
-    } catch { return defaultLocale; }
-  });
+  // Start with the default locale on the server to ensure SSR output is stable.
+  const [locale, setLocaleState] = React.useState<LocaleKey>(defaultLocale);
 
   const setLocale = (l: LocaleKey) => {
     setLocaleState(l);
-    try { localStorage.setItem('locale', l); } catch {}
+    // persist selection only on the client
+    if (typeof window !== 'undefined') {
+      try { localStorage.setItem('locale', l); } catch {}
+    }
   };
 
   React.useEffect(() => {
     try {
-      if (typeof window === 'undefined') return;
-      // only auto-detect if the user hasn't previously selected a locale
-      const stored = localStorage.getItem('locale');
-      if (stored) return;
-      const nav = (navigator.languages && navigator.languages[0]) || (navigator.language) || '';
-      const detected: LocaleKey = nav.startsWith('vi') ? 'vi' : 'en';
-      setLocale(detected);
+      // only run client-side: attempt to read stored locale or detect from navigator
+      const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') : null;
+      if (stored) {
+        setLocaleState(stored as LocaleKey);
+        return;
+      }
+      const nav = (typeof navigator !== 'undefined' && ((navigator.languages && navigator.languages[0]) || navigator.language)) || '';
+      const detected: LocaleKey = String(nav).startsWith('vi') ? 'vi' : 'en';
+      setLocaleState(detected);
     } catch {
-      // ignore
+      // ignore client-side detection errors
     }
   }, []);
 

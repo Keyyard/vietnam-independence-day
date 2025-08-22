@@ -1,15 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;800&display=swap');
-/* 'Imperial Script' isn't available on Google Fonts; use 'Great Vibes' as a close decorative script fallback, or load a local font if you have it. */
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;700&display=swap&subset=vietnamese');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
 :root {
   /* Theme colors provided by the user */
-  --theme-primary: #B9375D; /* strong */
-  --theme-accent: #D25D5D;  /* slightly lighter */
-  --theme-muted: #E7D3D3;   /* muted background */
-  --theme-bg: #ffecc9;      /* page background */
+  --theme-primary: #B9375D;
+  /* strong */
+  --theme-accent: #D25D5D;
+  /* slightly lighter */
+  --theme-muted: #E7D3D3;
+  /* muted background */
+  --theme-bg: #ffecc9;
+  /* page background */
   --theme-primary-hover: #da5a5a;
 
   --ui-card: #ffffff;
@@ -22,23 +24,38 @@
 body {
   background: var(--theme-bg);
   color: var(--text-default);
-  font-family: 'Be Vietnam Pro', Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  font-size: 18px; /* increased base size for better readability */
+  /* Prefer a Vietnamese-capable UI font; fall back to system fonts. */
+  font-family: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-size: 18px;
+  /* increased base size for better readability */
 }
 
 /* Title font utility */
 .font-title {
-  font-family: 'Great Vibes', 'Imperial Script', cursive;
+  /* Pixel-art / retro heading font */
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* Subheading utility to space and style the smaller line under the title */
+.subheading {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  color: var(--theme-accent);
 }
 
 /* UI font utility (explicit) */
 .font-ui {
-  font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+  /* UI font that supports Vietnamese — used for body/subheading text */
+  font-family: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
 }
 
 /* Extra-large heading utility */
 .heading-xl {
-  font-size: 4.5rem; /* approx Tailwind text-8xl */
+  font-size: 4.5rem;
+  /* approx Tailwind text-8xl */
   line-height: 1;
 }
 
@@ -47,15 +64,19 @@ body {
   position: relative;
   display: inline-block;
 }
+
 .heading-back {
   position: absolute;
-  left: 0.15rem; /* offset to the right */
-  top: 0.15rem; /* offset downward slightly */
+  left: 0.15rem;
+  /* offset to the right */
+  top: 0.15rem;
+  /* offset downward slightly */
   color: rgba(0, 0, 0, 0.182);
   z-index: 0;
   filter: blur(0.2px);
   white-space: nowrap;
 }
+
 .heading-front {
   position: relative;
   z-index: 1;
@@ -81,8 +102,9 @@ body {
   background: var(--ui-card);
   border: 1px solid var(--ui-border);
   border-radius: 8px;
-  padding: 0.75rem; /* make card contain inner spacing by default */
-  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+  padding: 0.75rem;
+  /* make card contain inner spacing by default */
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
 }
 
 .btn-primary {
@@ -123,7 +145,8 @@ body {
 .thumb.selected {
   background: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   position: relative;
-  z-index: 10; /* make selected thumbnail appear above neighbors */
+  z-index: 10;
+  /* make selected thumbnail appear above neighbors */
 }
 
 /* Ensure images inside thumbnails fit the square consistently */
@@ -142,21 +165,25 @@ body {
 
 /* small utility */
 .shadow-soft {
-  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
 }
 
 @media screen and (max-width: 768px) {
   .heading-xl {
-    font-size: 3rem; /* adjust for smaller screens */
+    font-size: 3rem;
+    /* adjust for smaller screens */
   }
 }
 
 @media screen and (max-width: 480px) {
   .heading-xl {
-    font-size: 1.5rem; /* further adjust for very small screens */
+    font-size: 1.5rem;
+    /* further adjust for very small screens */
   }
+
   body {
-    font-size: 16px; /* slightly smaller base font for mobile */
+    font-size: 16px;
+    /* slightly smaller base font for mobile */
   }
 }
 
